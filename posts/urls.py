@@ -1,10 +1,12 @@
 from django.urls import path
-from .views import PostListView, post_detail
+from .views import post_list, post_detail, post_share
 
 app_name = 'posts'
 
 urlpatterns = [
-    path('', PostListView.as_view(), name='list'),
-    path('<int:year>/<int:month>/<int:day>/<slug:post>/',
-         post_detail, name='detail')
+    path('', post_list, name='list'),
+    path('tag/<slug:tag_slug>/', post_list, name='tagged'),
+    path('<int:year>/<int:month>/<int:day>/<slug:slug>/',
+         post_detail, name='detail'),
+    path('<int:post_id>', post_share, name='share')
 ]

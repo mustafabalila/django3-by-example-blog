@@ -7,6 +7,39 @@
 <p class="date">
   Published {{ post.publish }} by {{ post.author }}
 </p>
-{{ post.body|linebreaks }}
+{{ post.body | linebreaks }}
+<p>
+  <a href="{% url 'posts:share' post.id %}">
+    Share post
+  </a>
+</p>
+{% with comments.count as total_comments %}
+<h2>
+  {{ total_comments }} comment{{ total_comment | pluralize }}
+</h2>
+{% endwith %}
+<!--  -->
+{% for comment in comments %}
+<div class="comment">
+  <p class="info">
+    By {{ comment.author }} at
+    <!--  -->
+    {{comment.created}}
+  </p>
+  {{ comment.body | linebreaks }}
+</div>
+{% empty %}
+<p>There are no comments yet.</p>
+{% endfor %} {% if new_comment %}
+<p>Your comment has been added.</p>
+{% else %}
+<h2>Add a new comment</h2>
+<form method="post">
+  {{ comment_form.as_p }} {% csrf_token %}
+  <p>
+    <input type="submit" value="Add comment" />
+  </p>
+</form>
+{% endif %}
 <!--  -->
 {% endblock %}
