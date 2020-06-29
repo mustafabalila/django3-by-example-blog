@@ -1,5 +1,7 @@
 {% extends "posts/base.html" %}
 <!--  -->
+{% load posts_tags %}
+<!--  -->
 {% block title %} {{ post.title }} {% endblock %}
 <!--  -->
 {% block content %}
@@ -7,12 +9,23 @@
 <p class="date">
   Published {{ post.publish }} by {{ post.author }}
 </p>
-{{ post.body | linebreaks }}
+{{ post.body | markdown }}
 <p>
   <a href="{% url 'posts:share' post.id %}">
     Share post
   </a>
 </p>
+<div>
+  {% if similar_posts %}
+  <h2>Similar posts</h2>
+  {% for post in similar_posts %}
+  <p>
+    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+  </p>
+  {% endfor %}
+  <!--  -->
+  {% endif %}
+</div>
 {% with comments.count as total_comments %}
 <h2>
   {{ total_comments }} comment{{ total_comment | pluralize }}
@@ -41,5 +54,6 @@
   </p>
 </form>
 {% endif %}
+
 <!--  -->
 {% endblock %}
